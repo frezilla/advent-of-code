@@ -36,7 +36,6 @@ dictionary = {}
 
 for line in file:
     current_line = line.strip()
-    print(current_line)
     datas = current_line.split()
 
     nb_datas = len(datas)
@@ -62,3 +61,8 @@ for line in file:
         raise Exception(f"Parse error {current_line}")
 
 print(f"Signal provided to wire {wireName} is {dictionary[wireName].value}")
+
+wireNameToOverride = input("Name of wire you want to override: ")
+dictionary[wireNameToOverride].value = dictionary[wireName].value
+dictionary[wireNameToOverride].update_children()
+print(f"New signal provided to wire {wireName} is {dictionary[wireName].value}")
