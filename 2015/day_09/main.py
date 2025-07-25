@@ -10,3 +10,5 @@ myGraph = Graph()
 for line in file:
     datas = line.strip().split()
     myGraph.add(datas[0], datas[2], int(datas[4]))
+
+myGraph.dijkstra("Faerun")

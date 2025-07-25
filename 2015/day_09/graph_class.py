@@ -5,7 +5,7 @@ from node_class import Node
 
 
 class Graph:
-    def __init__(self, node1, node2):
+    def __init__(self):
         self.arcs = set()
         self.nodes = set()
         self.set_p = set()
@@ -15,8 +15,8 @@ class Graph:
         node1 = Node(node_name_1)
         node2 = Node(node_name_2)
         arc = Arc(node1, node2, distance)
-        self.nodes.add(node_name_1)
-        self.nodes.add(node_name_2)
+        self.nodes.add(Node(node_name_1))
+        self.nodes.add(Node(node_name_2))
         self.arcs.add(arc)
 
     def dijkstra(self, node_name_1):
@@ -54,7 +54,7 @@ class Graph:
         self.set_q.clear()
         for node in self.nodes:
             if node.name == node_name:
-                node.distance = 0
+                node.weight = 0
             else:
                 node.weight = inf
             self.set_q.add(node)
