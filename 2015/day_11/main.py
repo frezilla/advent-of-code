@@ -25,15 +25,15 @@ def check_invalid_letter(password):
 
 
 def check_pairs(password):
-    map = {}
-    for letter in password:
-        nb_occ = map.setdefault(letter, 0)
-        nb_occ += 1
-        map[letter] = nb_occ
+    prev_letter = None
     nb_pairs = 0
-    for pair in map.items():
-        if pair[1] > 1:
+    for index in range(len(password)):
+        if password[index] == prev_letter:
             nb_pairs += 1
+            index += 1
+        if index < len(password):
+            prev_letter = password[index]
+        index += 1
     return nb_pairs > 1
 
 
@@ -76,6 +76,7 @@ def inc_password(password):
 print("--- Day 11: Corporate Policy ---")
 password = input("Password : ")
 valid_password = False
+print(check_pairs(password))
 while not valid_password:
     if check_increasing_straight(password) and check_invalid_letter(password) and check_pairs(password):
         print(f"New password : {password}")
