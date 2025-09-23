@@ -8,6 +8,8 @@ def check_increasing_straight(password):
     for i in range(password_length):
         current_ascii = ord(password[i])
         if previous_ascii + 1 == current_ascii:
+            if size == 0:
+                size = 1
             size += 1
         else:
             size = 0
@@ -25,16 +27,24 @@ def check_invalid_letter(password):
 
 
 def check_pairs(password):
-    prev_letter = None
-    nb_pairs = 0
-    for index in range(len(password)):
-        if password[index] == prev_letter:
-            nb_pairs += 1
-            index += 1
-        if index < len(password):
-            prev_letter = password[index]
-        index += 1
-    return nb_pairs > 1
+    len_password = len(password)
+    if len_password < 2:
+        return False
+    else:
+        prev_letter = password[0]
+        index = 1
+        nb_pairs = 0
+        while index < len_password:
+            current_letter = password[index]
+            if prev_letter == current_letter:
+                nb_pairs += 1
+                index += 2
+                if index < len_password:
+                    prev_letter = password[index - 1]
+            else:
+                prev_letter = current_letter
+                index += 1
+        return nb_pairs > 1
 
 
 def inc_letter(letter):
@@ -76,9 +86,8 @@ def inc_password(password):
 print("--- Day 11: Corporate Policy ---")
 password = input("Password : ")
 valid_password = False
-print(check_pairs(password))
 while not valid_password:
+    password = inc_password(password)
     if check_increasing_straight(password) and check_invalid_letter(password) and check_pairs(password):
         print(f"New password : {password}")
         break
-    password = inc_password(password)
