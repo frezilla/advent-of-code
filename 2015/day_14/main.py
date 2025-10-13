@@ -14,6 +14,7 @@ class Reinder:
             distance += self.speed * min(self.fly_time, time % cycle_time)
         return distance
 
+
 print("--- Day 14: Reindeer Olympics ---")
 TIME = 2503
 inputFile = input("Input file name : ")
@@ -22,9 +23,30 @@ reinders = []
 for line in file:
     datas = line.strip().split()
     reinders.append(Reinder(datas[0], int(datas[3]), int(datas[6]), int(datas[13])))
+
 max_distance = 0
 for reinder in reinders:
     distance = reinder.run(TIME)
     if distance > max_distance:
         max_distance = distance
-print(f"Distance maximale parcourue par le vainqueur = {max_distance}")
+print(f"1ère partie : Distance maximale parcourue par le vainqueur = {max_distance}")
+
+ranking = dict()
+for reinder in reinders:
+    ranking[reinder.name] = 0
+for time in range(1, TIME + 1):
+    distances = dict()
+    max_distance = 0
+    for reinder in reinders:
+        distance = reinder.run(time)
+        if distance > max_distance:
+            max_distance = distance
+        distances[reinder.name] = distance
+    for rec in distances:
+        if distances[rec] == max_distance:
+            ranking[rec] += 1
+max_point = 0
+for rec in ranking:
+    if ranking[rec] > max_point:
+        max_point = ranking[rec]
+print(f"2ème partie : Nombre de points du ou des vainqueurs = {max_point}")
