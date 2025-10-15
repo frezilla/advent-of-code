@@ -55,6 +55,7 @@ def run(link, persons):
             new_value += current_name
             run(new_value, persons)
             persons.insert(index, current_name)
+            new_value = new_value[:len(new_value) - len(current_name)]
 
 
 print("--- Day 13: Knights of the Dinner Table ---")
