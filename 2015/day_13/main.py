@@ -4,18 +4,13 @@ class Person:
         self.left_neighbor = None
         self.right_neighbor = None
         self.rules = dict()
-        for current_rule in _rules:
-            self.rules.update({current_rule[1] : current_rule[2]})
+        if _rules:
+            for current_rule in _rules:
+                self.rules.update({current_rule[1] : current_rule[2]})
 
     def compute_happiness(self):
-        if self.left_neighbor:
-            left_value = self.rules.get(self.left_neighbor)
-        else:
-            left_value = 0
-        if self.right_neighbor:
-            right_value = self.rules.get(self.right_neighbor)
-        else:
-            right_value = 0
+        left_value = self.rules.setdefault(self.left_neighbor, 0)
+        right_value = self.rules.setdefault(self.right_neighbor, 0)
         return left_value + right_value
 
 
@@ -84,7 +79,15 @@ def run(_link, _names, _persons):
 print("--- Day 13: Knights of the Dinner Table ---")
 inputFile = input("Input file name : ")
 rules = read_rules(inputFile)
+print("Step 1")
 persons = create_persons_from_rules(rules)
+person_names = persons.keys()
+max_happiness = 0
+run("", list(person_names), persons)
+print("Step 2")
+for person in persons.values():
+    person.rules.update({'Me': 0})
+persons.update({'Me' : Person('Me', None)})
 person_names = persons.keys()
 max_happiness = 0
 run("", list(person_names), persons)
