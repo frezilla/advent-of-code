@@ -2,15 +2,25 @@ class AuntSue:
     def __init__(self, _name):
         self.name = _name
         self.children = None
+        self.children_indication = 'equal'
         self.cats = None
+        self.cats_indication = 'greater'
         self.samoyeds = None
+        self.samoyeds_indication = 'equal'
         self.pomeranians = None
+        self.pomeranians_indication = 'fewer'
         self.akitas = None
+        self.akitas_indication = 'equal'
         self.vizslas = None
+        self.vizslas_indication = 'equal'
         self.goldfish = None
+        self.goldfish_indication = 'fewer'
         self.trees = None
+        self.trees_indication = 'greater'
         self.cars = None
+        self.cars_indication = 'equal'
         self.perfumes = None
+        self.perfumes_indication = 'equal'
 
     def check(self, _children, _cats, _samoyeds, _pomeranians, _akitas, _vizslas, _goldfish, _trees, _cars, _perfumes):
         return (self.check_field(self.children, _children)
@@ -25,10 +35,48 @@ class AuntSue:
                 and self.check_field(self.perfumes, _perfumes))
 
     def check_field(self, field1, field2):
-        if field1:
-            return field1 == field2
-        else:
+        if field1 is None:
             return True
+        else:
+            return field1 == field2
+
+    def check_field_part2(self, field1, field2, indication):
+        if field1 is None:
+            return True
+        else:
+            if indication == 'fewer':
+                return field1 < field2
+            elif indication == 'greater':
+                return field1 > field2
+            else:
+                return field1 == field2
+
+    def check_part2(self, _children, _cats, _samoyeds, _pomeranians, _akitas, _vizslas, _goldfish, _trees, _cars, _perfumes):
+        return (self.check_field_part2(self.children, _children, self.children_indication)
+                and self.check_field_part2(self.cats, _cats, self.cats_indication)
+                and self.check_field_part2(self.samoyeds, _samoyeds, self.samoyeds_indication)
+                and self.check_field_part2(self.pomeranians, _pomeranians, self.pomeranians_indication)
+                and self.check_field_part2(self.akitas, _akitas, self.akitas_indication)
+                and self.check_field_part2(self.vizslas, _vizslas, self.vizslas_indication)
+                and self.check_field_part2(self.goldfish, _goldfish, self.goldfish_indication)
+                and self.check_field_part2(self.trees, _trees, self.trees_indication)
+                and self.check_field_part2(self.cars, _cars, self.cars_indication)
+                and self.check_field_part2(self.perfumes, _perfumes, self.perfumes_indication))
+
+    def display(self):
+        return ("""name: {}: children: {}, cats: {}, samoyeds: {}, pomeranians: {}, akitas: {}, vizslash: {}, goldfish: {}, trees: {}, cars: {}, perfumes: {}"""
+        .format(
+            self.name,
+            str(self.children),
+            str(self.cats),
+            str(self.samoyeds),
+            str(self.pomeranians),
+            str(self.akitas),
+            str(self.vizslas),
+            str(self.goldfish),
+            str(self.trees),
+            str(self.cars),
+            str(self.perfumes)))
 
 
 def load_aunts(_filename):
@@ -76,6 +124,13 @@ cars = 2
 perfumes = 1
 inputFile = input("Input file name : ")
 aunts = load_aunts(inputFile)
+print("Partie 1")
 for aunt in aunts:
     if aunt.check(children, cats, samoyeds, pomeranians, akitas, vizslas, goldfish, trees, cars, perfumes):
-        print(f"Numéro de tante Sue : {aunt.name}")
+        print(f"Tante Sue : {aunt.name}")
+        print(f"{aunt.display()}")
+print("Partie 2")
+for aunt in aunts:
+    if aunt.check_part2(children, cats, samoyeds, pomeranians, akitas, vizslas, goldfish, trees, cars, perfumes):
+        print(f"Tante Sue : {aunt.name}")
+        print(f"{aunt.display()}")
