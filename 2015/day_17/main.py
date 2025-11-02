@@ -8,30 +8,52 @@ def load_containers(_filename):
     for line in file:
         current_line = line.strip()
         result_list.append(int(current_line))
-    return list(result_list.sort(reverse=True))
+    return result_list
 
 
-def test_combination(_value, _containers, _target):
-    nb_bits = _value.bit_length()
-    container_value = _containers[len(_containers) - nb_bits]
-    if container_value > _target:
-        return 0
-    elif container_value == _target:
-        return 1
-    else:
-        mask = int('0' + ''.join('1' for i in range(nb_bits - 1)), 2)
-        new_value = mask or _value
-        return test_combination(new_value, _containers, _target - container_value)
+def select_containers(containers, str_combination):
+    _selected = list()
+    for index in range(len(str_combination)):
+        if str_combination[index] == '1':
+            _selected.append(containers[index])
+    return _selected
+
+
+def to_string(_value, size):
+    str_value = str(bin(_value))[2:]
+    return str_value.zfill(size)
 
 
 print("--- Day 17: No Such Thing as Too Much ---")
-# filename = input("Input file name : ")
-filename = '/home/frederic/Téléchargements/puzzle.txt'
+LITERS = 150
+filename = input("Input file name : ")
 containers = load_containers(filename)
-LITERS = 25
-nb_containers = len(containers)
-max_value = int(''.join('1' for i in range(pow(nb_containers, 2).bit_length())), 2)
-nb_combinations = 0
-for i in range(max_value, 0, - 1):
-    nb_combinations += test_combination(i, containers, LITERS)
-print(f"Nombre de combinaisons: {nb_combinations}")
+max_value = ''.join('1' for i in range(len(containers)))
+max_value_size = len(max_value)
+max_value = int(max_value, 2)
+print(f"Nombre de combinaisons à tester: {max_value}")
+combinations = list()
+ways = dict()
+for combination in range(1, max_value + 1):
+    str_combination = to_string(combination, max_value_size)
+    str_combination = str_combination[::-1]
+    selected = select_containers(containers, str_combination)
+    current_value = 0
+    str_selected = ''
+    nb_selected = 0
+    for current_container in selected:
+        nb_selected += 1
+        str_selected += str(current_container) + ' + '
+        current_value += current_container
+    if current_value == LITERS:
+        str_select = str_selected[:-3]
+        combinations.append(str_selected)
+        result_list = ways.get(nb_selected, list())
+        result_list.append(str_selected)
+        ways.update({nb_selected:result_list})
+print(f"Nombre total de combinaisons : {len(combinations)}")
+min_key = 99999
+for k in ways.keys():
+    if k < min_key:
+        min_key = k
+print(f"Nombre total de manières : {len(ways.get(min_key))}")
